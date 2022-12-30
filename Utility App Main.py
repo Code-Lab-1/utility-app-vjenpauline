@@ -1,6 +1,7 @@
-import sys
+import sys 
 import time
 
+# The list of products for the vending machine menu
 sandwiches = [{'id': '1', 'name': 'smoked turkey loaf', 'price': 20.0, 'stock': 3},
               {'id': '2', 'name': 'tomato and cheese focaccia', 'price': 16.5, 'stock': 5},
               {'id': '3', 'name': 'roasted beef sandwich', 'price': 23.4, 'stock': 3}]
@@ -21,16 +22,23 @@ others = [{'id': '1', 'name': 'cola', 'price': 3.25, 'stock': 2},
           {'id': '2', 'name': 'orange juice', 'price': 4.05, 'stock': 4},
           {'id': '3', 'name': 'bottled water', 'price': 2.99, 'stock': 5}]
 
-languages = ["English", "Arabic", "Filipino", "english", "filipino", "arabic"]
-bar_design = "-----------------------------------------------"
-
 list_food = ["Sandwiches", "Pastries", "Snacks"]
 list_drinks = ["Cold Drinks", "Others"]
+languages = ["English", "Arabic", "Filipino", "english", "filipino", "arabic"] # Languages the user can choose from
+bar_design = "==============================================="
 
 def content(text):
+    """Centers parameter text in the middle of 60 spaces"""
     print(f"{text}".center(60))
 
 def section(text1, text2):
+    """
+    Prints formatted section of selection in the vending machine
+    
+    Parameters:
+    text1 - Selection prompt
+    text2 - Choices
+    """
     content(bar_design)
     print("\n")
     content(text1)
@@ -39,30 +47,39 @@ def section(text1, text2):
     content(bar_design)
  
 def intro():
+    """Asks user to choose a language before continuing"""
     while True:
-        usr_lang = input("(THE MACHINE IS CASE SENSITIVE) Enter your language: ")
+        usr_lang = input("THE MACHINE IS CASE SENSITIVE - Enter your language: ")
         if usr_lang not in languages:
             print("\tPlease only enter the languages as shown.\n")
         else:
-            if usr_lang != "English" and usr_lang != "english":
+            if usr_lang != "English" and usr_lang != "english": # Denies user from going forward unless the language is English 
                 print("\tSorry, that language is still a work-in-progress. Choose a different language.\n")
             else:
                 break
 
 def menu(subcat):
-    print("# --- PRICE ----- NAME")
+    """Presents parameter subcat's information in columns, like a menu"""
     for item in subcat:      
         if item.get("stock") == 0:
-            subcat.remove(item)
+            print(f'[{item.get("name").upper()} - OUT OF STOCK]') # Notifies user that product is out of stock
+            subcat.remove(item) # Removes a product from the menu if its stock is depleted
 
+    print("# --- PRICE ----- NAME")
     for item in subcat:
-        print(item.get("id"), " |", item.get("price"), " |", item.get("name").title())
+        print(item.get("id"), "|", item.get("price"), "AED" " |", item.get("name").title())
+    print(" ")
 
 def usr_cat():
+    """ 
+    Asks user to pick product category to buy from
+    Displays all menus of subcategories based on category chosen
+    """
+    global choice
     choice = str(input("Enter your category: "))
     if choice == "Food":
         content(bar_design)
-        print("\nFOOD (3 Sub-categories)")
+        print("\nFOOD - 3 Sub-categories")
         print("\nSandwiches")
         menu(sandwiches)
         print("\nPastries")
@@ -72,7 +89,7 @@ def usr_cat():
 
     elif choice == "Drinks":
         content(bar_design)
-        print("DRINKS (2 Sub-categories)")
+        print("\nDRINKS - 2 Sub-categories")
         print("\nCold Drinks")
         menu(cold_drinks)
         print("\nOthers")
@@ -83,6 +100,7 @@ def usr_cat():
         usr_cat()
 
 def buy(subcat):
+    """Asks user for number of product to buy based on product sub-category (parameter) chosen"""
     global usr_choice
     global price
     
@@ -92,8 +110,9 @@ def buy(subcat):
             usr_choice = item         
             price = usr_choice.get("price")
 
+            # Displays message of the user's selection of product with its price
             print (f'\tYou\'ve selected a/an {usr_choice.get("name")}! This costs {price} AED.\n')
-            usr_choice["stock"] -= 1
+            usr_choice["stock"] -= 1 # Takes off one from the stock of the product
             time.sleep(1)
             break
                 
@@ -102,41 +121,53 @@ def buy(subcat):
         buy(subcat)
 
 def usr_subcat():
-    global subcat_ask 
+    """
+    Asks user for sub-category to buy from
+    Outputs function that asks user for product ID number after
+    """
+    global subcat_ask
     subcat_ask = input("\nEnter the sub-category you would like to buy from: ")
 
-    if subcat_ask == "Sandwiches":
-        buy(sandwiches)
-    elif subcat_ask == "Pastries":
-        buy(pastries)
-    elif subcat_ask == "Snacks":
-        buy(snacks)
-    elif subcat_ask == "Cold Drinks":
-        buy(cold_drinks)
-    elif subcat_ask == "Others":
-        buy(others)
-    else:
-        print("\tPlease only enter the sub-categories as shown.")
-        usr_subcat()
+    if choice == "Food":
+        if subcat_ask == "Sandwiches":
+            buy(sandwiches)
+        elif subcat_ask == "Pastries":
+            buy(pastries)
+        elif subcat_ask == "Snacks":
+            buy(snacks)
+        else:
+            print("\tPlease only enter the sub-categories as shown.")
+            usr_subcat()
+    
+    if choice == "Drinks":
+        if subcat_ask == "Cold Drinks":
+            buy(cold_drinks)
+        elif subcat_ask == "Others":
+            buy(others)
+        else:
+            print("\tPlease only enter the sub-categories as shown.")
+            usr_subcat()
     
 def usr_payment():
+    """Compels user to make a payment through two methods available"""
     payment = input("Enter your method of payment: ")
     if payment == "1":
-        print("Tap your card on the card reader. It will automatically deduct.")
-        time.sleep(1)
+        print("Tap your card on the card reader. It will automatically deduct.") 
+        time.sleep(1) # Delay to simulate a vending machine contacting the bank before deducting money
     elif payment == "2":
-        cash = float(input("Insert your cash on the bill acceptor: "))
+        cash = float(input("Insert your cash on the bill acceptor: ")) # Asks user to input an amount of money as payment
         if cash >= price:
-            change = cash - price
+            change = cash - price # Subtracts price from user's money to return excess
             print(f"{change} AED has been given back to you.")
         else:
             print("\nYou did not put enough money. Your order has been cancelled.")
-            sys.exit()
+            sys.exit() # Forcefully ends program because of insufficient money 
     else:
         print("\tPlease only enter 1 or 2.\n")
         usr_payment()
 
 def starducks():
+    """Main function of the vending machine"""
     content("------| WELCOME TO PAULINE'S STARDUCKS! |------")
     content("The First Ready-To-Go Starducks Vending Machine")
 
@@ -149,24 +180,28 @@ def starducks():
         section("Choose a Category", "Food | Drinks")
         
         usr_cat()
+        content(bar_design)
         usr_subcat()
         section("Choose Your Payment", "Credit Card | Card")
-        print("Type 1 for Credit Card, 2 for Cash")
+        print("\nType 1 for Credit Card, 2 for Cash")
 
         usr_payment()
+        # Message that user's product has been dispensed
         print(f'\tThank you for purchasing! Your {usr_choice.get("name")} has been dispensed.')
         time.sleep(1)
             
         again = input("\nBuy again? Enter 'quit' to stop: ")
+        # User may buy multiple products until its stock has been depleted
         if again == "quit":
             repeat = False
+            print("\nCome back next time!")
             return
 
-        else:
+        else: # Buying again will display a message that suggests the user to buy from the category not chosen
             if subcat_ask in list_food:
-                content("Get a drink to pair with your " + usr_choice.get("name") + "!")
+                content("Get a drink to pair with your " + usr_choice.get("name") + "!" + "\n")
             elif subcat_ask in list_drinks:
-                content("Buy food to pair with your " + usr_choice.get("name") + "!")
+                content("Buy food to pair with your " + usr_choice.get("name") + "!" + "\n")
             continue
 
 starducks()
