@@ -160,12 +160,12 @@ def usr_payment():
         print("Tap your card on the card reader. It will automatically deduct.") 
         time.sleep(1) # Delay to simulate a vending machine contacting the bank before deducting money
     elif payment == "2":
-        cash = float(input(colors.INPUT + "Insert your cash on the bill acceptor: " + colors.END)) # Asks user to input an amount of money as payment
+        cash = float(input(colors.INPUT + "Insert your dirhams on the bill acceptor: " + colors.END)) # Asks user to input an amount of money as payment
         if cash >= price:
             change = cash - price # Subtracts price from user's money to return excess
             print(f"{change} AED has been given back to you.")
         else:
-            print("\nYou did not put enough money. Your order has been cancelled.")
+            print("\nYou did not put enough money. Your order has been cancelled and refunded.")
             sys.exit() # Forcefully ends program because of insufficient money 
     else:
         print("\tPlease only enter 1 or 2.\n")
