@@ -1,6 +1,11 @@
 import sys 
 import time
 
+class colors: # To change the color of text
+    INPUT = '\033[95m'
+    BLUE = '\033[96m'
+    END = '\033[0m'
+
 # The list of products for the vending machine menu
 sandwiches = [{'id': '1', 'name': 'smoked turkey loaf', 'price': 20.0, 'stock': 3},
               {'id': '2', 'name': 'tomato and cheese focaccia', 'price': 16.5, 'stock': 5},
@@ -49,7 +54,7 @@ def section(text1, text2):
 def intro():
     """Asks user to choose a language before continuing"""
     while True:
-        usr_lang = input("THE MACHINE IS CASE SENSITIVE - Enter your language: ")
+        usr_lang = input(colors.INPUT + "THE MACHINE IS CASE SENSITIVE - Enter your language: " + colors.END)
         if usr_lang not in languages:
             print("\tPlease only enter the languages as shown.\n")
         else:
@@ -76,23 +81,23 @@ def usr_cat():
     Displays all menus of subcategories based on category chosen
     """
     global choice
-    choice = str(input("Enter your category: "))
+    choice = str(input(colors.INPUT + "Enter your category: " + colors.END))
     if choice == "Food":
         content(bar_design)
         print("\nFOOD - 3 Sub-categories")
-        print("\nSandwiches")
+        print("\n" + colors.BLUE + "Sandwiches" + colors.END)
         menu(sandwiches)
-        print("\nPastries")
+        print("\n" + colors.BLUE + "Pastries" + colors.END)
         menu(pastries)
-        print("\nSnacks")
+        print("\n" + colors.BLUE + "Snacks" + colors.END)
         menu(snacks)
 
     elif choice == "Drinks":
         content(bar_design)
         print("\nDRINKS - 2 Sub-categories")
-        print("\nCold Drinks")
+        print("\n" + colors.BLUE + "Cold Drinks" + colors.END)
         menu(cold_drinks)
-        print("\nOthers")
+        print("\n" + colors.BLUE + "Others" + colors.END)
         menu(others)
             
     else:
@@ -104,7 +109,7 @@ def buy(subcat):
     global usr_choice
     global price
     
-    usr_choice = input("Enter the number that corresponds with the product you want to buy: ")
+    usr_choice = input(colors.INPUT + "Enter the number that corresponds with the product you want to buy: " + colors.END)
     for item in subcat:
         if usr_choice == item.get("id"):
             usr_choice = item         
@@ -126,7 +131,7 @@ def usr_subcat():
     Outputs function that asks user for product ID number after
     """
     global subcat_ask
-    subcat_ask = input("\nEnter the sub-category you would like to buy from: ")
+    subcat_ask = input(colors.INPUT + "\nEnter the sub-category you would like to buy from: " + colors.END)
 
     if choice == "Food":
         if subcat_ask == "Sandwiches":
@@ -150,12 +155,12 @@ def usr_subcat():
     
 def usr_payment():
     """Compels user to make a payment through two methods available"""
-    payment = input("Enter your method of payment: ")
+    payment = input(colors.INPUT + "Enter your method of payment: " + colors.END)
     if payment == "1":
         print("Tap your card on the card reader. It will automatically deduct.") 
         time.sleep(1) # Delay to simulate a vending machine contacting the bank before deducting money
     elif payment == "2":
-        cash = float(input("Insert your cash on the bill acceptor: ")) # Asks user to input an amount of money as payment
+        cash = float(input(colors.INPUT + "Insert your cash on the bill acceptor: " + colors.END)) # Asks user to input an amount of money as payment
         if cash >= price:
             change = cash - price # Subtracts price from user's money to return excess
             print(f"{change} AED has been given back to you.")
@@ -190,7 +195,7 @@ def starducks():
         print(f'\tThank you for purchasing! Your {usr_choice.get("name")} has been dispensed.')
         time.sleep(1)
             
-        again = input("\nBuy again? Enter 'quit' to stop: ")
+        again = input(colors.INPUT + "\nBuy again? Enter 'quit' to stop: " + colors.END)
         # User may buy multiple products until its stock has been depleted
         if again == "quit":
             repeat = False
