@@ -144,7 +144,7 @@ def usr_subcat():
             print("\tPlease only enter the sub-categories as shown.")
             usr_subcat()
     
-    if choice == "Drinks":
+    else:
         if subcat_ask == "Cold Drinks":
             buy(cold_drinks)
         elif subcat_ask == "Others":
